@@ -1,0 +1,56 @@
+{
+  "name": "raml-to-html",
+  "version": "0.0.1",
+  "description": "Cross-compiled executable for RAML to HTML documentation generation",
+  "main": "src/run.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development node src/run.js",
+    "test": "mocha --recursive \"src/**/*.spec.js\"",
+    "lint": "eslint src",
+    "lint-fix": "eslint src --fix",
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run build:linux && npm run build:win && npm run build:mac",
+    "build:linux": "pkg . -t node8-linux-x64 -o build/raml-to-html",
+    "build:win": "pkg . -t node8-win-x64 -o build/raml-to-html.exe",
+    "build:mac": "pkg . -t node8-macos-x64 -o build/raml-to-html-mac"
+  },
+  "bin": "src/run.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpusCapita/raml-to-html.git"
+  },
+  "keywords": [
+    "raml",
+    "html",
+    "generator",
+    "binary",
+    "executable"
+  ],
+  "author": {
+    "name": "Andrei Mourzenkov",
+    "email": "andrei.mourzenkov@opuscapita.com"
+  },
+  "engines": {
+    "node": ">=8.5.0"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/OpusCapita/raml-to-html/issues"
+  },
+  "homepage": "https://github.com/OpusCapita/raml-to-html#readme",
+  "devDependencies": {
+    "babel-eslint": "10.0.1",
+    "chai": "4.2.0",
+    "cross-env": "5.2.0",
+    "eslint": "5.6.1",
+    "eslint-config-opuscapita": "2.0.1",
+    "eslint-plugin-react": "7.11.1",
+    "mocha": "5.2.0",
+    "pkg": "4.3.4",
+    "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "commander": "2.19.0",
+    "raml2html": "7.2.0"
+  }
+}
