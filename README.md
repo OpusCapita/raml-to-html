@@ -2,6 +2,8 @@
 
 Platfrom-dependent executables of RAML to HTML documentation generator.
 
+RAML 1.0 specification only is supported.
+
 ## Usage
 
 A file path is provided either as a command line argument or through STDIN.
@@ -18,7 +20,7 @@ raml-to-html <file>
 raml-to-html.exe <file>
 ```
 
-### Examples.
+### Examples
 
 #### Output HTML code to console
 
