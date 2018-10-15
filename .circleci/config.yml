@@ -1,0 +1,125 @@
+defaults: &defaults
+  docker:
+    - image: opuscapita/minsk-core-ci:grails-2.4.4-jdk-8u131-nodejs-8.9.4-maven-3.3.9
+  working_directory: ~/build
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - run:
+          name: Environment inject
+          command: /bin/env_inject.sh
+
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+            - ./package-lock.json
+
+      - run:
+          name: Lint
+          command: npm run lint
+
+      - run:
+          name: Test
+          command: npm test
+
+      - run:
+          name: Build packages
+          command: npm run build
+
+  build-release:
+    <<: *defaults
+    steps:
+      - run:
+          name: Environment inject
+          command: /bin/env_inject.sh
+
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+            - ./package-lock.json
+
+      - run:
+          name: Lint
+          command: npm run lint
+
+      - run:
+          name: Test
+          command: npm test
+
+      - run:
+          name: Build packages
+          command: npm run build
+
+      - run:
+          name: Compress release assets
+          command: |
+            cd build
+            chmod +x ./raml-to-html*
+
+            tar -czf raml-to-html-linux.tar.gz raml-to-html
+            rm -f raml-to-html
+
+            mv raml-to-html-mac raml-to-html
+            tar -czf raml-to-html-mac.tar.gz raml-to-html
+
+            apt-get update
+            apt-get install zip
+            zip raml-to-html-win.zip raml-to-html.exe
+
+            mv *.tar.gz ..
+            mv raml-to-html-win.zip ..
+
+      - run:
+          name: Upload release assets
+          command: |
+            GIT_API_REPO_URL="https://api.github.com/repos/OpusCapita/"$CIRCLE_PROJECT_REPONAME""
+
+            RELEASE=$(curl -sS --user "$GH_NAME:$GH_TOKEN" "${GIT_API_REPO_URL}/releases/tags/${CIRCLE_TAG}")
+            UPLOAD_URL=$(echo $RELEASE | jq '.upload_url' | sed 's/{.*}//' | sed -e 's/^"//' -e 's/"$//')
+
+            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-linux.tar.gz 'RAML-to-HTML-CLI%20(Linux)' raml-to-html-cli-${CIRCLE_TAG}-linux.tar.gz
+            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-mac.tar.gz 'RAML-to-HTML-CLI%20(MacOS)' raml-to-html-cli-${CIRCLE_TAG}-darwin.tar.gz
+            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-win.zip 'RAML-to-HTML-CLI%20(Windows)' raml-to-html-cli-${CIRCLE_TAG}-windows.zip
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - release
+      - build-release:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
