@@ -1,6 +1,6 @@
 {
   "name": "raml-to-html",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Cross-compiled executable for RAML to HTML documentation generation",
   "main": "src/run.js",
   "scripts": {
