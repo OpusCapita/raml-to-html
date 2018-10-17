@@ -104,9 +104,9 @@ jobs:
             RELEASE=$(curl -sS --user "$GH_NAME:$GH_TOKEN" "${GIT_API_REPO_URL}/releases/tags/${CIRCLE_TAG}")
             UPLOAD_URL=$(echo $RELEASE | jq '.upload_url' | sed 's/{.*}//' | sed -e 's/^"//' -e 's/"$//')
 
-            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-linux.tar.gz 'RAML-to-HTML-CLI%20(Linux)' raml-to-html-cli-${CIRCLE_TAG}-linux.tar.gz
-            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-mac.tar.gz 'RAML-to-HTML-CLI%20(MacOS)' raml-to-html-cli-${CIRCLE_TAG}-darwin.tar.gz
-            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-win.zip 'RAML-to-HTML-CLI%20(Windows)' raml-to-html-cli-${CIRCLE_TAG}-windows.zip
+            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-linux.tar.gz 'RAML-to-HTML%20(Linux)' raml-to-html-${CIRCLE_TAG}-linux.tar.gz
+            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-mac.tar.gz 'RAML-to-HTML%20(MacOS)' raml-to-html-${CIRCLE_TAG}-darwin.tar.gz
+            node /bin/upload-asset.js $UPLOAD_URL raml-to-html-win.zip 'RAML-to-HTML%20(Windows)' raml-to-html-${CIRCLE_TAG}-windows.zip
 
 workflows:
   version: 2
