@@ -8,7 +8,7 @@ const processFile = async filePath => process.stdout.write(
   'utf8',
   function(error) {
     if (error) {
-      console.error("error", e);
+      console.error("error", error);
       process.exit(1);
     } else {
       process.exit(0);
