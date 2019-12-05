@@ -5,7 +5,15 @@ const { version } = require('../package.json');
 
 const processFile = async filePath => process.stdout.write(
   await render(filePath.trim(), getConfigForTheme()),
-  'utf8'
+  'utf8',
+  function(error) {
+    if (error) {
+      console.error("error", e);
+      process.exit(1);
+    } else {
+      process.exit(0);
+    }
+  }
 );
 
 program.
