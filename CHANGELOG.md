@@ -1,4 +1,10 @@
 
+[Release 0.0.3](https://github.com/OpusCapita/raml-to-html/releases/tag/v0.0.3) Thu Dec 05 2019 08:30:50 GMT+0300 (MSK)
+=======================================================
+
+- Fixing syntax error (Alexey Sergeev alexey.sergeev@opuscapita.com, 2019-12-05 08:26:51 +0300)
+- Fixing program 'freezing' (Alexey Sergeev alexey.sergeev@opuscapita.com, 2019-12-05 08:17:56 +0300)
+
 [Release 0.0.2](https://github.com/OpusCapita/raml-to-html/releases/tag/v0.0.2) Wed Oct 17 2018 11:24:42 GMT+0300 (MSK)
 =======================================================
 
